@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bullet Dodge</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+      <h1>BULLET DODGE</h1>
+      <p class="subtitle">총알을 피해 살아남으세요!</p>
+
+      <div id="ranking-display">
+        <h2>🏆 랭킹</h2>
+        <ol id="ranking-list"></ol>
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="nickname-input" placeholder="닉네임 입력" maxlength="10" />
+      </div>
+
+      <button id="start-btn" class="btn">게임 시작</button>
+
+      <div class="controls-info">
+        <p>마우스로 이동 | 총알을 피하세요!</p>
+      </div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div id="score-display">점수: <span id="score">0</span>초</div>
+      <div id="lives-display">
+        <span id="lives-icons"></span>
+      </div>
+      <div id="item-display">
+        <span id="active-item"></span>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen hidden">
+      <h1>GAME OVER</h1>
+      <div class="score-result">
+        <p>생존 시간: <span id="final-score">0</span>초</p>
+        <p id="rank-message"></p>
+      </div>
+      <div id="final-ranking">
+        <h2>🏆 랭킹</h2>
+        <ol id="final-ranking-list"></ol>
+      </div>
+      <button id="restart-btn" class="btn">다시 시작</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/App.js"></script>
+</body>
+</html>
