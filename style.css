@@ -628,14 +628,35 @@ input[type="text"]:focus {
   max-width: 160px;
   border: 2px solid #D0D0D0;
   background: #FAFAFA;
-  padding: 16px 10px;
+  padding: 12px 10px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
+  position: relative;
   transition: border-color 0.1s, background 0.1s, box-shadow 0.1s;
   user-select: none;
+}
+
+.ability-card-tag {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  font-size: 0.68rem;
+  font-weight: bold;
+  padding: 2px 7px;
+  letter-spacing: 0.03em;
+}
+
+.tag-new {
+  background: #217346;
+  color: #fff;
+}
+
+.tag-up {
+  background: #1a6aaa;
+  color: #fff;
 }
 
 .ability-card:hover {
