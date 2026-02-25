@@ -195,6 +195,9 @@
       </div>
     </div>
 
+    <!-- Boss Warning -->
+    <div id="boss-warning" class="hidden"></div>
+
     <!-- XP Bar -->
     <div id="xp-bar-container" class="hidden">
       <div id="xp-bar"></div>
@@ -210,6 +213,28 @@
         <div class="excel-dialog-body">
           <p class="levelup-subtitle">능력을 하나 선택하세요</p>
           <div id="ability-cards"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Win Screen -->
+    <div id="win-screen" class="screen hidden">
+      <div class="excel-dialog">
+        <div class="excel-dialog-titlebar">
+          <span>Microsoft Excel</span>
+          <span class="excel-dialog-x">&#10005;</span>
+        </div>
+        <div class="excel-dialog-body">
+          <h1>🎉 생존 성공!</h1>
+          <div class="score-result">
+            <p>15분을 버텨냈습니다!</p>
+            <p>생존 시간: <span id="win-score">900</span>초</p>
+          </div>
+          <div id="win-ranking">
+            <h2>🏆 랭킹</h2>
+            <ol id="win-ranking-list"></ol>
+          </div>
+          <button id="win-restart-btn" class="btn">다시 시작</button>
         </div>
       </div>
     </div>

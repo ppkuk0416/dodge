@@ -605,6 +605,29 @@ input[type="text"]:focus {
   padding: 3px 10px;
 }
 
+/* ===== Boss Warning ===== */
+#boss-warning {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(180, 0, 0, 0.88);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 7px 20px;
+  border: 2px solid #ff4444;
+  z-index: 10;
+  animation: boss-pulse 0.7s ease-in-out infinite alternate;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@keyframes boss-pulse {
+  from { opacity: 0.75; box-shadow: 0 0 6px rgba(255,0,0,0.4); }
+  to   { opacity: 1;    box-shadow: 0 0 18px rgba(255,0,0,0.9); }
+}
+
 /* ===== Level-up dialog ===== */
 .excel-dialog-wide {
   max-width: 600px;

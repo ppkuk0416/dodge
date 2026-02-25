@@ -6,7 +6,7 @@ import { SoundManager }   from './Sound.js';
 import { EnemySystem }    from './Enemy.js';
 import { WeaponSystem, WEAPON_DEFS } from './Weapon.js';
 
-const STATE = { START: 0, PLAYING: 1, GAMEOVER: 2, LEVELUP: 3 };
+const STATE = { START: 0, PLAYING: 1, GAMEOVER: 2, LEVELUP: 3, WIN: 4 };
 
 // Patterns unlocked progressively
 const PATTERN_LEVELS = [
@@ -17,6 +17,126 @@ const PATTERN_LEVELS = [
   ['rain', 'aimed', 'burst', 'cross', 'spiral', 'wall'],
   ['rain', 'aimed', 'burst', 'cross', 'spiral', 'wall', 'ring'],
 ];
+
+// ── One-Eyed Monster Boss ──────────────────────────────────────────────────
+class Boss {
+  constructor(x, y) {
+    this.x      = x;
+    this.y      = y;
+    this.radius = 52;
+    this.alive  = true;
+    this._t     = 0;      // internal animation timer
+    this._lookX = x;
+    this._lookY = y;
+  }
+
+  update(dt, px, py) {
+    this._t    += dt;
+    this._lookX = px;
+    this._lookY = py;
+
+    const dx   = px - this.x, dy = py - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+    const spd  = Math.min(210, 75 + this._t / 1000 * 7); // accelerates
+    this.x += (dx / dist) * spd * dt / 1000;
+    this.y += (dy / dist) * spd * dt / 1000;
+  }
+
+  collidesWith(player) {
+    const dx = this.x - player.x, dy = this.y - player.y;
+    return Math.sqrt(dx * dx + dy * dy) < this.radius + player.radius;
+  }
+
+  draw(ctx) {
+    const t     = this._t;
+    const pulse = 0.5 + 0.5 * Math.sin(t * 0.006);
+    const R     = this.radius;
+
+    // ── Red aura ──
+    const aura = ctx.createRadialGradient(this.x, this.y, R * 0.4, this.x, this.y, R * 2.4);
+    aura.addColorStop(0, `rgba(180,0,0,${0.28 + pulse * 0.18})`);
+    aura.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, R * 2.4, 0, Math.PI * 2);
+    ctx.fillStyle = aura;
+    ctx.fill();
+
+    // ── Tentacles ──
+    const N = 10;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    for (let i = 0; i < N; i++) {
+      const a   = (i / N) * Math.PI * 2 + t * 0.0016;
+      const len = R * (0.5 + 0.38 * Math.sin(t * 0.004 + i * 1.15));
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a) * R * 0.82, Math.sin(a) * R * 0.82);
+      ctx.lineTo(Math.cos(a) * (R + len), Math.sin(a) * (R + len));
+      ctx.strokeStyle = `rgba(210,0,55,${0.65 + pulse * 0.35})`;
+      ctx.lineWidth   = 5;
+      ctx.lineCap     = 'round';
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // ── Body ──
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, R, 0, Math.PI * 2);
+    ctx.fillStyle = '#100015';
+    ctx.fill();
+    ctx.strokeStyle = `rgba(220,0,60,${0.75 + pulse * 0.25})`;
+    ctx.lineWidth   = 3;
+    ctx.stroke();
+
+    // ── Eye socket ──
+    const erx = R * 0.54, ery = R * 0.42;
+    ctx.beginPath();
+    ctx.ellipse(this.x, this.y, erx + 5, ery + 5, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#200030';
+    ctx.fill();
+
+    // ── Sclera ──
+    ctx.beginPath();
+    ctx.ellipse(this.x, this.y, erx, ery, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff8cc';
+    ctx.fill();
+    ctx.strokeStyle = '#bb3300';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+
+    // ── Blood veins ──
+    ctx.save();
+    ctx.globalAlpha = 0.32 + pulse * 0.12;
+    for (let i = 0; i < 6; i++) {
+      const va = (i / 6) * Math.PI * 2 + 0.5;
+      ctx.beginPath();
+      ctx.moveTo(this.x + Math.cos(va) * erx * 0.12, this.y + Math.sin(va) * ery * 0.08);
+      ctx.lineTo(this.x + Math.cos(va) * erx * 0.88, this.y + Math.sin(va) * ery * 0.78);
+      ctx.strokeStyle = '#ff2200';
+      ctx.lineWidth   = 1;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // ── Pupil (tracks player) ──
+    const ddx   = this._lookX - this.x, ddy = this._lookY - this.y;
+    const ddist = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
+    const off   = erx * 0.32;
+    const px2   = this.x + (ddx / ddist) * off;
+    const py2   = this.y + (ddy / ddist) * off * 0.65;
+    const prx   = erx * 0.40, pry = ery * 0.50;
+
+    ctx.beginPath();
+    ctx.ellipse(px2, py2, prx, pry, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#060008';
+    ctx.fill();
+
+    // Highlight
+    ctx.beginPath();
+    ctx.arc(px2 - prx * 0.28, py2 - pry * 0.3, prx * 0.22, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,200,200,0.82)';
+    ctx.fill();
+  }
+}
 
 class App {
   constructor() {
@@ -53,6 +173,7 @@ class App {
     this.xp       = 0;
     this.xpNeeded = 50;
 
+    // Boss
     this._setupDOM();
     this._setupEvents();
     this._loadRanking();
@@ -81,9 +202,11 @@ class App {
     this.$nickname       = document.getElementById('nickname-input');
     this.$levelDisplay   = document.getElementById('level-display');
     this.$xpBar          = document.getElementById('xp-bar');
+    this.$bossWarning    = document.getElementById('boss-warning');
 
-    document.getElementById('start-btn').addEventListener('click',   () => this._startGame());
-    document.getElementById('restart-btn').addEventListener('click', () => this._toStart());
+    document.getElementById('start-btn').addEventListener('click',    () => this._startGame());
+    document.getElementById('restart-btn').addEventListener('click',  () => this._toStart());
+    document.getElementById('win-restart-btn').addEventListener('click', () => this._toStart());
 
     this.$nickname.addEventListener('keydown', e => {
       if (e.key === 'Enter') this._startGame();
@@ -162,6 +285,10 @@ class App {
     this.weapons   = new WeaponSystem(this.canvas);
     this.weapons.upgrade('basic'); // start with Basic Lv.1
 
+    this.boss       = null;
+    this.bossActive = false;
+    this.bossWarned = false;
+
     this.mx = this.canvas.width  / 2;
     this.my = this.canvas.height / 2;
 
@@ -171,6 +298,8 @@ class App {
 
   _toStart() {
     this.$gameoverScreen.classList.add('hidden');
+    document.getElementById('win-screen').classList.add('hidden');
+    if (this.$bossWarning) this.$bossWarning.classList.add('hidden');
     this._loadRanking();
     this.$startScreen.classList.remove('hidden');
     this.state = STATE.START;
@@ -180,6 +309,7 @@ class App {
     this.state = STATE.GAMEOVER;
     this.$hud.classList.add('hidden');
     document.getElementById('xp-bar-container').classList.add('hidden');
+    if (this.$bossWarning) this.$bossWarning.classList.add('hidden');
     this.sound.stopBGM();
     this.sound.playGameOver();
 
@@ -259,10 +389,46 @@ class App {
     this.state = STATE.PLAYING;
   }
 
+  _triggerBoss() {
+    this.bossActive = true;
+    // Clear all enemies and bullets for a clean boss entrance
+    this.enemies.clear();
+    this.bullets.clearAll();
+
+    // Spawn from a random edge, far from player
+    const w = this.canvas.width, h = this.canvas.height;
+    const side = Math.floor(Math.random() * 4);
+    let bx, by;
+    if      (side === 0) { bx = Math.random() * w; by = -80; }
+    else if (side === 1) { bx = w + 80;            by = Math.random() * h; }
+    else if (side === 2) { bx = Math.random() * w; by = h + 80; }
+    else                 { bx = -80;               by = Math.random() * h; }
+    this.boss = new Boss(bx, by);
+  }
+
+  _winGame() {
+    this.state = STATE.WIN;
+    this.$hud.classList.add('hidden');
+    document.getElementById('xp-bar-container').classList.add('hidden');
+    if (this.$bossWarning) this.$bossWarning.classList.add('hidden');
+    this.sound.stopBGM();
+
+    this._saveScore(this.nickname, this.score);
+    document.getElementById('win-score').textContent = this.score;
+    this._renderRanking(document.getElementById('win-ranking-list'));
+    document.getElementById('win-screen').classList.remove('hidden');
+  }
+
   // ── Game logic ─────────────────────────────────
 
+  // 0→8 over 15 minutes (900s). Each difficulty unit takes 112.5s.
   get _difficulty() {
-    return Math.min(this.time / 1000 / 15, 8);
+    return Math.min(this.time / 1000 / 112.5, 8);
+  }
+
+  // Seconds remaining until boss spawn
+  get _bossCountdown() {
+    return Math.max(0, Math.ceil((900000 - this.time) / 1000));
   }
 
   _pickPatterns() {
@@ -300,6 +466,23 @@ class App {
       }
     }
 
+    // ── Boss warning (30s before) ──
+    if (!this.bossWarned && this.time >= 870000) {
+      this.bossWarned = true;
+      if (this.$bossWarning) this.$bossWarning.classList.remove('hidden');
+    }
+    if (this.$bossWarning && !this.$bossWarning.classList.contains('hidden')) {
+      const cd = this._bossCountdown;
+      this.$bossWarning.textContent = cd > 0
+        ? `⚠️ 거대한 존재가 접근 중... ${cd}초`
+        : `⚠️ 괴물이 나타났다!`;
+    }
+
+    // ── Boss spawn at 15 minutes ──
+    if (!this.bossActive && this.time >= 900000) {
+      this._triggerBoss();
+    }
+
     const slowFactor = this.player.slow ? 0.28 : 1;
 
     this.player.update(this.mx, this.my, dt);
@@ -307,8 +490,19 @@ class App {
     this.items.update(dt, this.time);
     this.particles.update();
 
-    // Enemy system
-    this.enemies.update(dt, this._difficulty, this.player.x, this.player.y);
+    // ── Boss update ──
+    if (this.boss) {
+      this.boss.update(dt, this.player.x, this.player.y);
+      if (this.boss.collidesWith(this.player)) {
+        this._winGame();
+        return;
+      }
+    }
+
+    // Enemy system (skip when boss is active)
+    if (!this.bossActive) {
+      this.enemies.update(dt, this._difficulty, this.player.x, this.player.y);
+    }
 
     // Weapon auto-attack → process hits
     const weaponHits = this.weapons.update(dt, this.player.x, this.player.y, this.enemies.enemies);
@@ -497,12 +691,18 @@ class App {
 
     this._drawExcelBackground();
 
-    if (this.state === STATE.PLAYING || this.state === STATE.GAMEOVER || this.state === STATE.LEVELUP) {
+    const inGame = this.state === STATE.PLAYING
+                || this.state === STATE.GAMEOVER
+                || this.state === STATE.LEVELUP
+                || this.state === STATE.WIN;
+
+    if (inGame) {
       this.bullets?.draw(ctx);
       this.enemies?.draw(ctx, ts);
       this.items?.draw(ctx, ts);
+      this.boss?.draw(ctx);
       this.particles.draw(ctx);
-      if (this.state !== STATE.GAMEOVER) {
+      if (this.state !== STATE.GAMEOVER && this.state !== STATE.WIN) {
         this.weapons?.draw(ctx, this.player?.x ?? 0, this.player?.y ?? 0);
         this.player?.draw(ctx);
       }
