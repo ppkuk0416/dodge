@@ -36,9 +36,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   background: rgba(10, 10, 26, 0.88);
   z-index: 10;
-  gap: 18px;
+  gap: 14px;
 }
 
 .hidden {
@@ -92,6 +93,7 @@ ol li {
   padding: 5px 0;
   color: rgba(255, 255, 255, 0.75);
   font-size: 0.9rem;
+  text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
