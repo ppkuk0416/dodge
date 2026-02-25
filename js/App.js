@@ -4,7 +4,18 @@ import { ParticleSystem } from './Particles.js';
 import { ItemSystem }     from './Items.js';
 import { SoundManager }   from './Sound.js';
 
-const STATE = { START: 0, PLAYING: 1, GAMEOVER: 2 };
+const STATE = { START: 0, PLAYING: 1, GAMEOVER: 2, LEVELUP: 3 };
+
+const ABILITY_POOL = [
+  { id: 'speed',      icon: '💨', name: '이동 속도 UP',  desc: '이동 속도 +25%' },
+  { id: 'maxLife',    icon: '💖', name: '최대 체력 UP',  desc: '최대 목숨 +1, 목숨 +1' },
+  { id: 'extraLife',  icon: '❤️', name: '목숨 회복',     desc: '현재 목숨 +1' },
+  { id: 'bulletSlow', icon: '🌀', name: '총알 감속',      desc: '모든 총알 속도 -15%' },
+  { id: 'shieldUp',   icon: '🛡️', name: '방패 강화',     desc: '방패 지속시간 +3초' },
+  { id: 'slowUp',     icon: '⏱️', name: '슬로우 강화',   desc: '슬로우 지속시간 +3초' },
+  { id: 'autoBomb',   icon: '💣', name: '자동 폭탄',     desc: '25초마다 자동 폭발' },
+  { id: 'invincible', icon: '⭐', name: '무적 강화',     desc: '피격 후 무적시간 +1초' },
+];
 
 // Patterns unlocked progressively
 const PATTERN_LEVELS = [
@@ -48,6 +59,14 @@ class App {
     this.nickname = '';
     this.ranking  = [];
 
+    // Level-up system
+    this.level           = 1;
+    this.nextLevelTime   = 20000;
+    this.bulletSlowMult  = 1.0;
+    this.autoBombActive  = false;
+    this.autoBombTimer   = 0;
+    this.autoBombInterval = 25000;
+
     this._setupDOM();
     this._setupEvents();
     this._loadRanking();
@@ -74,6 +93,8 @@ class App {
     this.$rankingList   = document.getElementById('ranking-list');
     this.$finalRanking  = document.getElementById('final-ranking-list');
     this.$nickname      = document.getElementById('nickname-input');
+    this.$levelDisplay  = document.getElementById('level-display');
+    this.$xpBar         = document.getElementById('xp-bar');
 
     document.getElementById('start-btn').addEventListener('click',   () => this._startGame());
     document.getElementById('restart-btn').addEventListener('click', () => this._toStart());
@@ -142,10 +163,20 @@ class App {
 
     this.$startScreen.classList.add('hidden');
     this.$hud.classList.remove('hidden');
+    document.getElementById('xp-bar-container').classList.remove('hidden');
+    if (this.$levelDisplay) this.$levelDisplay.textContent = 'Lv.1';
 
     this.time          = 0;
     this.patternTimer  = 0;
     this.score         = 0;
+
+    // Reset level-up state
+    this.level           = 1;
+    this.nextLevelTime   = 20000;
+    this.bulletSlowMult  = 1.0;
+    this.autoBombActive  = false;
+    this.autoBombTimer   = 0;
+    this.autoBombInterval = 25000;
 
     this.player   = new Player(this.canvas);
     this.bullets  = new BulletSystem(this.canvas);
@@ -170,6 +201,7 @@ class App {
   _gameOver() {
     this.state = STATE.GAMEOVER;
     this.$hud.classList.add('hidden');
+    document.getElementById('xp-bar-container').classList.add('hidden');
     this.sound.stopBGM();
     this.sound.playGameOver();
 
@@ -206,6 +238,81 @@ class App {
     }
   }
 
+  // ── Level-up system ────────────────────────────
+
+  _pickAbilities() {
+    return [...ABILITY_POOL].sort(() => Math.random() - 0.5).slice(0, 3);
+  }
+
+  _triggerLevelUp() {
+    this.state = STATE.LEVELUP;
+    this.level++;
+    if (this.$levelDisplay) this.$levelDisplay.textContent = `Lv.${this.level}`;
+
+    const abilities = this._pickAbilities();
+    const container = document.getElementById('ability-cards');
+    document.getElementById('levelup-new-level').textContent = this.level;
+    container.innerHTML = abilities.map(a => `
+      <div class="ability-card" data-id="${a.id}">
+        <div class="ability-icon">${a.icon}</div>
+        <div class="ability-name">${a.name}</div>
+        <div class="ability-desc">${a.desc}</div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.ability-card').forEach(card => {
+      card.addEventListener('click', () => {
+        this._applyAbility(card.dataset.id);
+        this._resumeFromLevelUp();
+      }, { once: true });
+    });
+
+    document.getElementById('levelup-screen').classList.remove('hidden');
+  }
+
+  _resumeFromLevelUp() {
+    document.getElementById('levelup-screen').classList.add('hidden');
+    this.state = STATE.PLAYING;
+  }
+
+  _applyAbility(id) {
+    const p = this.player;
+    switch (id) {
+      case 'speed':
+        p.speedMult *= 1.25;
+        break;
+      case 'maxLife':
+        p.maxLives++;
+        p.lives = Math.min(p.lives + 1, p.maxLives);
+        this._updateLives();
+        break;
+      case 'extraLife':
+        if (p.lives < p.maxLives) { p.lives++; this._updateLives(); }
+        else { p.maxLives++; p.lives++; this._updateLives(); }
+        break;
+      case 'bulletSlow':
+        this.bulletSlowMult *= 0.85;
+        break;
+      case 'shieldUp':
+        p.shieldDuration += 3000;
+        break;
+      case 'slowUp':
+        p.slowDuration += 3000;
+        break;
+      case 'autoBomb':
+        if (!this.autoBombActive) {
+          this.autoBombActive = true;
+          this.autoBombTimer = 0;
+        } else {
+          this.autoBombInterval = Math.max(10000, this.autoBombInterval - 5000);
+        }
+        break;
+      case 'invincible':
+        p.invincibleDuration += 1000;
+        break;
+    }
+  }
+
   // ── Game logic ─────────────────────────────────
 
   get _difficulty() {
@@ -219,7 +326,7 @@ class App {
   }
 
   _applyKeyboard(dt) {
-    const spd = 400 * dt / 1000; // 400px/s
+    const spd = 400 * (this.player?.speedMult ?? 1) * dt / 1000;
     if (this.keys['w'] || this.keys['arrowup'])    this.my -= spd;
     if (this.keys['s'] || this.keys['arrowdown'])  this.my += spd;
     if (this.keys['a'] || this.keys['arrowleft'])  this.mx -= spd;
@@ -250,10 +357,32 @@ class App {
       }
     }
 
+    // Level-up trigger
+    if (this.time >= this.nextLevelTime) {
+      this.nextLevelTime += 20000;
+      this._triggerLevelUp();
+      return;
+    }
+
+    // Auto-bomb
+    if (this.autoBombActive) {
+      this.autoBombTimer += dt;
+      if (this.autoBombTimer >= this.autoBombInterval) {
+        this.autoBombTimer = 0;
+        this.particles.emitBomb(this.canvas.width / 2, this.canvas.height / 2);
+        this.bullets.clearAll();
+        this.sound.playItemPickup('bomb');
+      }
+    }
+
+    // XP bar
+    const xpProgress = Math.min(100, (this.time - (this.nextLevelTime - 20000)) / 20000 * 100);
+    if (this.$xpBar) this.$xpBar.style.width = xpProgress + '%';
+
     const slow = this.player.slow ? 0.28 : 1;
 
     this.player.update(this.mx, this.my, dt);
-    this.bullets.update(dt, this.player.x, this.player.y, slow);
+    this.bullets.update(dt, this.player.x, this.player.y, slow * this.bulletSlowMult);
     this.items.update(dt, this.time);
     this.particles.update();
 

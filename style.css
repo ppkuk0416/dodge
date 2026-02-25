@@ -522,6 +522,24 @@ input[type="text"]:focus {
   text-align: center;
 }
 
+/* ===== XP Bar ===== */
+#xp-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 6;
+}
+
+#xp-bar {
+  height: 100%;
+  width: 0%;
+  background: #217346;
+  transition: width 0.2s linear;
+}
+
 /* ===== HUD ===== */
 #hud {
   position: absolute;
@@ -562,6 +580,21 @@ input[type="text"]:focus {
 .life-icon.active { color: #cc2244; }
 .life-icon.lost   { color: rgba(200, 50, 80, 0.2); }
 
+#hud-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#level-display {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+  background: #217346;
+  border: 1px solid #1a5c38;
+  padding: 3px 8px;
+}
+
 #active-item {
   font-size: 0.9rem;
   color: #217346;
@@ -570,6 +603,67 @@ input[type="text"]:focus {
   background: rgba(255,255,255,0.88);
   border: 1px solid #C0C0C0;
   padding: 3px 10px;
+}
+
+/* ===== Level-up dialog ===== */
+.excel-dialog-wide {
+  max-width: 600px;
+}
+
+.levelup-subtitle {
+  color: #444;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+#ability-cards {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.ability-card {
+  flex: 1;
+  min-width: 130px;
+  max-width: 160px;
+  border: 2px solid #D0D0D0;
+  background: #FAFAFA;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.1s, background 0.1s, box-shadow 0.1s;
+  user-select: none;
+}
+
+.ability-card:hover {
+  border-color: #217346;
+  background: #EFF7F2;
+  box-shadow: 0 0 0 1px #217346;
+}
+
+.ability-card:active {
+  background: #D6EDE0;
+}
+
+.ability-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ability-name {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+
+.ability-desc {
+  font-size: 0.78rem;
+  color: #555;
+  text-align: center;
 }
 
 /* ===== Game Over dialog extras ===== */

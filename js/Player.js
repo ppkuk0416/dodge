@@ -22,11 +22,12 @@ export class Player {
     this.slowDuration = 5000;
 
     this.trail = [];
+    this.speedMult = 1.0;
   }
 
   update(mouseX, mouseY, deltaTime) {
     // Smooth follow
-    const lerp = Math.min(1, 0.18 * (deltaTime / 16));
+    const lerp = Math.min(1, 0.18 * this.speedMult * (deltaTime / 16));
     this.x += (mouseX - this.x) * lerp;
     this.y += (mouseY - this.y) * lerp;
 

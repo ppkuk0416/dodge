@@ -189,8 +189,28 @@
       <div id="lives-display">
         <span id="lives-icons"></span>
       </div>
-      <div id="item-display">
+      <div id="hud-right">
+        <span id="level-display">Lv.1</span>
         <span id="active-item"></span>
+      </div>
+    </div>
+
+    <!-- XP Bar -->
+    <div id="xp-bar-container" class="hidden">
+      <div id="xp-bar"></div>
+    </div>
+
+    <!-- Level-up Screen -->
+    <div id="levelup-screen" class="screen hidden">
+      <div class="excel-dialog excel-dialog-wide">
+        <div class="excel-dialog-titlebar">
+          <span>레벨 업! → Level <span id="levelup-new-level">2</span></span>
+          <span class="excel-dialog-x">&#10005;</span>
+        </div>
+        <div class="excel-dialog-body">
+          <p class="levelup-subtitle">능력을 하나 선택하세요</p>
+          <div id="ability-cards"></div>
+        </div>
       </div>
     </div>
 
