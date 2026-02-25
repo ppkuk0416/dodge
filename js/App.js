@@ -209,8 +209,8 @@ class App {
   // ── Game logic ─────────────────────────────────
 
   get _difficulty() {
-    // 0→8 over 4 minutes
-    return Math.min(this.time / 1000 / 30, 8);
+    // 0→8 over 2 minutes (2x faster than before)
+    return Math.min(this.time / 1000 / 15, 8);
   }
 
   _pickPatterns() {
@@ -236,14 +236,14 @@ class App {
     this.$score.textContent = this.score;
 
     // Pattern spawn interval shrinks with difficulty
-    this.patternInterval = Math.max(280, 1500 - this._difficulty * 140);
+    this.patternInterval = Math.max(200, 900 - this._difficulty * 140);
     this.patternTimer += dt;
 
     if (this.patternTimer >= this.patternInterval) {
       this.patternTimer = 0;
       const pool    = this._pickPatterns();
       const pattern = pool[Math.floor(Math.random() * pool.length)];
-      const speed   = 2.2 + this._difficulty * 0.5;
+      const speed   = 3.5 + this._difficulty * 0.5;
       const repeats = Math.max(1, Math.floor(1 + this._difficulty * 0.25));
       for (let i = 0; i < repeats; i++) {
         this.bullets.spawnPattern(pattern, this.player.x, this.player.y, speed);
