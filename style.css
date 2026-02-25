@@ -5,12 +5,334 @@
 }
 
 body {
-  background: #0a0a1a;
-  font-family: 'Arial', sans-serif;
+  background: #FFFFFF;
+  font-family: 'Segoe UI', 'Malgun Gothic', Arial, sans-serif;
   overflow: hidden;
-  color: white;
+  color: #000;
   user-select: none;
 }
+
+/* ================================================================
+   EXCEL CHROME — Title bar, Ribbon, Formula bar
+   ================================================================ */
+
+#excel-chrome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* --- Title Bar --- */
+#excel-titlebar {
+  background: #217346;
+  color: #fff;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+#excel-title-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 120px;
+}
+
+#excel-logo {
+  background: #fff;
+  color: #217346;
+  font-weight: 900;
+  font-size: 11px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+
+#excel-quick-access {
+  font-size: 13px;
+  opacity: 0.85;
+  letter-spacing: 3px;
+}
+
+#excel-title-center {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#excel-title-right {
+  display: flex;
+  min-width: 120px;
+  justify-content: flex-end;
+}
+
+.wbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 28px;
+  font-size: 12px;
+  cursor: default;
+}
+
+.wbtn-close { color: #fff; }
+
+/* --- Ribbon Tabs --- */
+#excel-ribbon-tabs {
+  background: #217346;
+  display: flex;
+  padding: 0 6px;
+  gap: 0;
+}
+
+.rt {
+  padding: 4px 10px 3px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: default;
+  border-radius: 3px 3px 0 0;
+  white-space: nowrap;
+}
+
+.rt-active {
+  background: #FFFFFF;
+  color: #000;
+}
+
+/* --- Ribbon Body --- */
+#excel-ribbon-body {
+  background: #FFFFFF;
+  border-bottom: 1px solid #C8C8C8;
+  display: flex;
+  align-items: stretch;
+  padding: 2px 4px 0;
+  min-height: 58px;
+  overflow: hidden;
+}
+
+.rg {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-right: 1px solid #E0E0E0;
+  padding: 2px 6px 0;
+  min-width: 0;
+}
+
+.rg-last {
+  border-right: none;
+}
+
+.rg-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.rg-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rg-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rg-label {
+  font-size: 9px;
+  color: #666;
+  text-align: center;
+  padding: 1px 0 2px;
+  white-space: nowrap;
+}
+
+/* Ribbon buttons */
+.rb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: 10px;
+  color: #333;
+  padding: 2px 4px;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.rb-big {
+  flex-direction: column;
+  width: 40px;
+  height: 44px;
+  font-size: 22px;
+  padding: 2px;
+}
+
+.rb-big small { font-size: 9px; color: #333; margin-top: 1px; }
+
+.rb-sm { font-size: 10px; gap: 3px; height: 14px; }
+.rb-sm2 { font-size: 10px; height: 15px; padding: 1px 6px; }
+
+.rb-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+}
+
+.rb-bold  { font-weight: 900; }
+.rb-italic { font-style: italic; }
+.rb-uline  { text-decoration: underline; }
+.rb-active { background: #E8F4FC; border-color: #B8D4E8; }
+
+.rb-wide {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: 10px;
+  color: #333;
+  padding: 2px 5px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.rb-select {
+  font-size: 10px;
+  border: 1px solid #C0C0C0;
+  background: #fff;
+  color: #333;
+  height: 20px;
+  padding: 0 2px;
+  border-radius: 2px;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* --- Formula Bar --- */
+#excel-formula-bar {
+  background: #FFFFFF;
+  border-bottom: 1px solid #C8C8C8;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 4px;
+  font-size: 12px;
+}
+
+#excel-namebox {
+  width: 54px;
+  text-align: center;
+  border: 1px solid #AAAAAA;
+  padding: 1px 3px;
+  font-size: 11px;
+  color: #000;
+  background: #fff;
+}
+
+#excel-fx {
+  font-size: 13px;
+  color: #217346;
+  padding: 0 6px;
+  border-left: 1px solid #C8C8C8;
+  border-right: 1px solid #C8C8C8;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+#excel-fx em { font-style: italic; font-family: 'Times New Roman', serif; }
+
+#excel-formula-content {
+  flex: 1;
+  font-size: 11px;
+  color: #000;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ================================================================
+   EXCEL FOOTER — Sheet tabs & Status bar
+   ================================================================ */
+
+#excel-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: #F2F2F2;
+  border-top: 1px solid #C8C8C8;
+  height: 22px;
+  display: flex;
+  align-items: stretch;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+#excel-sheet-tabs {
+  display: flex;
+  align-items: stretch;
+  padding-left: 4px;
+  gap: 0;
+}
+
+#excel-new-sheet {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  color: #666;
+  font-size: 14px;
+  cursor: default;
+}
+
+.st {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border-left: 1px solid #C8C8C8;
+  border-right: 1px solid #C8C8C8;
+  color: #666;
+  font-size: 11px;
+  cursor: default;
+}
+
+.st-active {
+  background: #FFFFFF;
+  color: #000;
+  border-top: 2px solid #217346;
+}
+
+#excel-status-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-right: 12px;
+  color: #444;
+  font-size: 11px;
+}
+
+/* ================================================================
+   GAME CONTAINER
+   ================================================================ */
 
 #game-container {
   position: relative;
@@ -25,7 +347,10 @@ body {
   left: 0;
 }
 
-/* ===== Screens ===== */
+/* ================================================================
+   SCREENS — Excel-style dialog boxes
+   ================================================================ */
+
 .screen {
   position: absolute;
   top: 0;
@@ -36,52 +361,86 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  background: rgba(10, 10, 26, 0.88);
-  z-index: 10;
-  gap: 14px;
+  background: rgba(180, 180, 180, 0.35);
+  z-index: 20;
 }
 
 .hidden {
   display: none !important;
 }
 
-/* ===== Title ===== */
+/* Excel Dialog Box */
+.excel-dialog {
+  background: #F2F2F2;
+  border: 1px solid #AAAAAA;
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.35);
+  min-width: 340px;
+  max-width: 480px;
+  width: 90%;
+}
+
+.excel-dialog-titlebar {
+  background: #217346;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.excel-dialog-x {
+  font-size: 12px;
+  cursor: default;
+  opacity: 0.85;
+}
+
+.excel-dialog-body {
+  background: #FFFFFF;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+/* ===== Title inside dialog ===== */
 h1 {
-  font-size: 3.2rem;
+  font-size: 2.2rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
-  background: linear-gradient(135deg, #64c8ff, #aa44ff);
+  letter-spacing: 0.2em;
+  background: linear-gradient(135deg, #217346, #40a070);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 24px rgba(100, 200, 255, 0.5));
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1rem;
-  letter-spacing: 0.05em;
+  color: #444;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
 }
 
-/* ===== Ranking ===== */
+/* ===== Ranking inside dialog ===== */
 #ranking-display,
 #final-ranking {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 14px 28px;
-  min-width: 260px;
+  background: #F9F9F9;
+  border: 1px solid #D0D0D0;
+  border-radius: 2px;
+  padding: 10px 20px;
+  min-width: 240px;
   text-align: center;
+  width: 100%;
 }
 
 #ranking-display h2,
 #final-ranking h2 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  color: #ffcc44;
-  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #217346;
+  letter-spacing: 0.04em;
 }
 
 ol {
@@ -90,75 +449,76 @@ ol {
 }
 
 ol li {
-  padding: 5px 0;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.9rem;
+  padding: 4px 0;
+  color: #333;
+  font-size: 0.85rem;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #EEEEEE;
 }
 
 ol li:last-child {
   border-bottom: none;
 }
 
-li.gold   { color: #ffd700; font-weight: bold; }
-li.silver { color: #c0c0c0; font-weight: bold; }
-li.bronze { color: #cd7f32; font-weight: bold; }
+li.gold   { color: #B8860B; font-weight: bold; }
+li.silver { color: #666; font-weight: bold; }
+li.bronze { color: #8B4513; font-weight: bold; }
 
-/* ===== Input ===== */
+/* ===== Input inside dialog ===== */
 .input-group {
   display: flex;
   gap: 8px;
 }
 
 input[type="text"] {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 8px;
-  padding: 10px 18px;
-  color: white;
-  font-size: 1rem;
+  background: #FFFFFF;
+  border: 1px solid #7F7F7F;
+  border-radius: 0;
+  padding: 5px 10px;
+  color: #000;
+  font-size: 0.95rem;
   outline: none;
   text-align: center;
   width: 200px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: #999;
 }
 
 input[type="text"]:focus {
-  border-color: #64c8ff;
-  box-shadow: 0 0 12px rgba(100, 200, 255, 0.3);
+  border-color: #217346;
+  box-shadow: 0 0 0 2px rgba(33, 115, 70, 0.2);
 }
 
-/* ===== Button ===== */
+/* ===== Button inside dialog ===== */
 .btn {
-  background: linear-gradient(135deg, #64c8ff, #aa44ff);
-  border: none;
-  border-radius: 10px;
-  padding: 12px 36px;
+  background: #217346;
+  border: 1px solid #1a5c38;
+  border-radius: 2px;
+  padding: 6px 28px;
   color: white;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: bold;
   cursor: pointer;
-  letter-spacing: 0.1em;
-  transition: transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 0.05em;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  transition: background 0.1s;
 }
 
 .btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 24px rgba(100, 200, 255, 0.5);
+  background: #1a5c38;
 }
 
 .btn:active {
-  transform: scale(0.97);
+  background: #144d2e;
 }
 
 .controls-info {
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 0.8rem;
+  color: #888;
+  font-size: 0.78rem;
   text-align: center;
 }
 
@@ -177,49 +537,58 @@ input[type="text"]:focus {
 }
 
 #score-display {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
-  color: #64c8ff;
-  text-shadow: 0 0 10px rgba(100, 200, 255, 0.6);
+  color: #217346;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #C0C0C0;
+  padding: 3px 10px;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 #lives-display {
   display: flex;
   gap: 6px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #C0C0C0;
+  padding: 3px 10px;
 }
 
 .life-icon {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   transition: opacity 0.3s;
 }
 
-.life-icon.active { color: #ff5577; }
-.life-icon.lost   { color: rgba(255, 85, 119, 0.2); }
+.life-icon.active { color: #cc2244; }
+.life-icon.lost   { color: rgba(200, 50, 80, 0.2); }
 
 #active-item {
-  font-size: 1rem;
-  color: #00ffcc;
+  font-size: 0.9rem;
+  color: #217346;
   min-width: 60px;
   text-align: right;
-  text-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #C0C0C0;
+  padding: 3px 10px;
 }
 
-/* ===== Game Over ===== */
+/* ===== Game Over dialog extras ===== */
 .score-result {
   text-align: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 16px 36px;
+  background: #F9F9F9;
+  border: 1px solid #D0D0D0;
+  padding: 10px 28px;
+  width: 100%;
 }
 
 .score-result p {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 4px 0;
+  font-size: 1rem;
+  color: #333;
+  margin: 3px 0;
 }
 
 #rank-message {
-  color: #ffcc44;
+  color: #217346;
   font-weight: bold;
   margin-top: 4px;
 }

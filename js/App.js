@@ -283,23 +283,88 @@ class App {
     this._updateActiveItem();
   }
 
+  // ── Excel spreadsheet background ───────────────
+
+  _colLabel(n) {
+    let label = '';
+    while (n > 0) {
+      n--;
+      label = String.fromCharCode(65 + (n % 26)) + label;
+      n = Math.floor(n / 26);
+    }
+    return label;
+  }
+
+  _drawExcelBackground() {
+    const ctx = this.ctx;
+    const w = this.canvas.width, h = this.canvas.height;
+    const COL_W = 65, ROW_H = 20, HDR_H = 18, ROW_NUM_W = 32;
+
+    // White fill
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+
+    // Header backgrounds
+    ctx.fillStyle = '#F2F2F2';
+    ctx.fillRect(0, 0, w, HDR_H);          // column header row
+    ctx.fillRect(0, 0, ROW_NUM_W, h);      // row number column
+
+    // Corner cell
+    ctx.fillStyle = '#E9E9E9';
+    ctx.fillRect(0, 0, ROW_NUM_W, HDR_H);
+
+    ctx.save();
+    ctx.strokeStyle = '#D0D0D0';
+    ctx.lineWidth = 1;
+
+    // Vertical column lines + column letters
+    ctx.fillStyle = '#555';
+    ctx.font = '11px Segoe UI, Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    let col = 1;
+    for (let x = ROW_NUM_W; x <= w; x += COL_W) {
+      ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, h); ctx.stroke();
+      if (x + COL_W / 2 < w) {
+        ctx.fillText(this._colLabel(col), x + COL_W / 2, HDR_H / 2);
+      }
+      col++;
+    }
+
+    // Horizontal row lines + row numbers
+    let row = 1;
+    for (let y = HDR_H; y <= h; y += ROW_H) {
+      ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(w, y + 0.5); ctx.stroke();
+      if (y + ROW_H / 2 < h) {
+        ctx.fillText(row, ROW_NUM_W / 2, y + ROW_H / 2);
+      }
+      row++;
+    }
+
+    // Header border lines (slightly darker)
+    ctx.strokeStyle = '#A8A8A8';
+    ctx.beginPath(); ctx.moveTo(0, HDR_H + 0.5); ctx.lineTo(w, HDR_H + 0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ROW_NUM_W + 0.5, 0); ctx.lineTo(ROW_NUM_W + 0.5, h); ctx.stroke();
+
+    ctx.restore();
+
+    // Update Excel name box with player cell position (while playing)
+    if (this.player) {
+      const c = Math.max(1, Math.floor((this.player.x - ROW_NUM_W) / COL_W) + 1);
+      const r = Math.max(1, Math.floor((this.player.y - HDR_H) / ROW_H) + 1);
+      const nb = document.getElementById('excel-namebox');
+      if (nb) nb.textContent = this._colLabel(c) + r;
+    }
+  }
+
   // ── Rendering ──────────────────────────────────
 
   _draw(ts) {
     const ctx = this.ctx;
     const w = this.canvas.width, h = this.canvas.height;
 
-    // Background
-    ctx.fillStyle = '#0a0a1a';
-    ctx.fillRect(0, 0, w, h);
-
-    // Subtle grid
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,0.028)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < w; x += 48) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-    for (let y = 0; y < h; y += 48) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-    ctx.restore();
+    // Excel spreadsheet background
+    this._drawExcelBackground();
 
     if (this.state === STATE.PLAYING || this.state === STATE.GAMEOVER) {
       this.bullets?.draw(ctx);

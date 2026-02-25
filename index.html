@@ -3,31 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bullet Dodge</title>
+  <title>Book1.xlsx - Microsoft Excel</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- ===== Excel Chrome ===== -->
+  <div id="excel-chrome">
+
+    <!-- Title Bar -->
+    <div id="excel-titlebar">
+      <div id="excel-title-left">
+        <span id="excel-logo">X</span>
+        <span id="excel-quick-access">&#128190; &#8617; &#8618;</span>
+      </div>
+      <div id="excel-title-center">Book1.xlsx - Microsoft Excel</div>
+      <div id="excel-title-right">
+        <span class="wbtn">&#8212;</span>
+        <span class="wbtn">&#9633;</span>
+        <span class="wbtn wbtn-close">&#10005;</span>
+      </div>
+    </div>
+
+    <!-- Ribbon Tabs -->
+    <div id="excel-ribbon-tabs">
+      <span class="rt">파일</span>
+      <span class="rt rt-active">홈</span>
+      <span class="rt">삽입</span>
+      <span class="rt">페이지 레이아웃</span>
+      <span class="rt">수식</span>
+      <span class="rt">데이터</span>
+      <span class="rt">검토</span>
+      <span class="rt">보기</span>
+    </div>
+
+    <!-- Ribbon Body -->
+    <div id="excel-ribbon-body">
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rb rb-big">&#128203;<br/><small>붙여넣기</small></div>
+          <div class="rg-col">
+            <div class="rb rb-sm">&#9986; 잘라내기</div>
+            <div class="rb rb-sm">&#128203; 복사</div>
+            <div class="rb rb-sm">&#127820; 서식 복사</div>
+          </div>
+        </div>
+        <div class="rg-label">클립보드</div>
+      </div>
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rg-row">
+              <select class="rb-select" style="width:90px"><option>맑은 고딕</option></select>
+              <select class="rb-select" style="width:36px"><option>11</option></select>
+              <div class="rb rb-icon">A&#8593;</div>
+              <div class="rb rb-icon">A&#8595;</div>
+            </div>
+            <div class="rg-row">
+              <div class="rb rb-icon rb-bold">B</div>
+              <div class="rb rb-icon rb-italic">I</div>
+              <div class="rb rb-icon rb-uline">U</div>
+              <div class="rb rb-icon">&#9646;</div>
+              <div class="rb rb-icon">&#9644;</div>
+              <div class="rb rb-icon">A</div>
+            </div>
+          </div>
+        </div>
+        <div class="rg-label">글꼴</div>
+      </div>
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rg-row">
+              <div class="rb rb-icon">&#8598;</div>
+              <div class="rb rb-icon">&#8593;</div>
+              <div class="rb rb-icon">&#8599;</div>
+              <div class="rb rb-icon">&#8628;</div>
+              <div class="rb rb-icon rb-active">&#9776;</div>
+            </div>
+            <div class="rg-row">
+              <div class="rb rb-icon rb-active">&#8602;</div>
+              <div class="rb rb-icon rb-active">&#8603;</div>
+              <div class="rb rb-icon rb-active">&#8604;</div>
+              <div class="rb rb-wide">병합하고 가운데 맞춤 &#9660;</div>
+            </div>
+          </div>
+        </div>
+        <div class="rg-label">맞춤</div>
+      </div>
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rg-row">
+              <div class="rb-wide">일반 &#9660;</div>
+            </div>
+            <div class="rg-row">
+              <div class="rb rb-icon">%</div>
+              <div class="rb rb-icon">,</div>
+              <div class="rb rb-icon">.0+</div>
+              <div class="rb rb-icon">0-.</div>
+            </div>
+          </div>
+        </div>
+        <div class="rg-label">표시 형식</div>
+      </div>
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rb-wide rb-sm2">조건부 서식 &#9660;</div>
+            <div class="rb-wide rb-sm2">표 서식 &#9660;</div>
+            <div class="rb-wide rb-sm2">셀 스타일 &#9660;</div>
+          </div>
+        </div>
+        <div class="rg-label">스타일</div>
+      </div>
+      <div class="rg">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rg-row">
+              <div class="rb-wide rb-sm2">&#128441; 삽입 &#9660;</div>
+              <div class="rb-wide rb-sm2">&#128465; 삭제 &#9660;</div>
+              <div class="rb-wide rb-sm2">&#9998; 서식 &#9660;</div>
+            </div>
+          </div>
+        </div>
+        <div class="rg-label">셀</div>
+      </div>
+      <div class="rg rg-last">
+        <div class="rg-content">
+          <div class="rg-col">
+            <div class="rb-wide rb-sm2">&#931; 자동 합계 &#9660;</div>
+            <div class="rb-wide rb-sm2">&#8595; 채우기 &#9660;</div>
+            <div class="rb-wide rb-sm2">&#9003; 지우기 &#9660;</div>
+          </div>
+        </div>
+        <div class="rg-label">편집</div>
+      </div>
+    </div>
+
+    <!-- Formula Bar -->
+    <div id="excel-formula-bar">
+      <div id="excel-namebox">A1</div>
+      <div id="excel-fx"><em>f</em><em>x</em></div>
+      <div id="excel-formula-content">=VLOOKUP(B$1,Sheet2!$A:$D,4,FALSE)</div>
+    </div>
+
+  </div><!-- /excel-chrome -->
+
+  <!-- ===== Game Container ===== -->
   <div id="game-container">
     <canvas id="gameCanvas"></canvas>
 
     <!-- Start Screen -->
     <div id="start-screen" class="screen">
-      <h1>BULLET DODGE</h1>
-      <p class="subtitle">총알을 피해 살아남으세요!</p>
+      <div class="excel-dialog">
+        <div class="excel-dialog-titlebar">
+          <span>Bullet Dodge</span>
+          <span class="excel-dialog-x">&#10005;</span>
+        </div>
+        <div class="excel-dialog-body">
+          <h1>BULLET DODGE</h1>
+          <p class="subtitle">총알을 피해 살아남으세요!</p>
 
-      <div id="ranking-display">
-        <h2>🏆 랭킹</h2>
-        <ol id="ranking-list"></ol>
-      </div>
+          <div id="ranking-display">
+            <h2>🏆 랭킹</h2>
+            <ol id="ranking-list"></ol>
+          </div>
 
-      <div class="input-group">
-        <input type="text" id="nickname-input" placeholder="닉네임 입력" maxlength="10" />
-      </div>
+          <div class="input-group">
+            <input type="text" id="nickname-input" placeholder="닉네임 입력" maxlength="10" />
+          </div>
 
-      <button id="start-btn" class="btn">게임 시작</button>
+          <button id="start-btn" class="btn">게임 시작</button>
 
-      <div class="controls-info">
-        <p>마우스로 이동 | 총알을 피하세요!</p>
+          <div class="controls-info">
+            <p>마우스로 이동 | 총알을 피하세요!</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -44,16 +196,39 @@
 
     <!-- Game Over Screen -->
     <div id="gameover-screen" class="screen hidden">
-      <h1>GAME OVER</h1>
-      <div class="score-result">
-        <p>생존 시간: <span id="final-score">0</span>초</p>
-        <p id="rank-message"></p>
+      <div class="excel-dialog">
+        <div class="excel-dialog-titlebar">
+          <span>Microsoft Excel</span>
+          <span class="excel-dialog-x">&#10005;</span>
+        </div>
+        <div class="excel-dialog-body">
+          <h1>GAME OVER</h1>
+          <div class="score-result">
+            <p>생존 시간: <span id="final-score">0</span>초</p>
+            <p id="rank-message"></p>
+          </div>
+          <div id="final-ranking">
+            <h2>🏆 랭킹</h2>
+            <ol id="final-ranking-list"></ol>
+          </div>
+          <button id="restart-btn" class="btn">다시 시작</button>
+        </div>
       </div>
-      <div id="final-ranking">
-        <h2>🏆 랭킹</h2>
-        <ol id="final-ranking-list"></ol>
-      </div>
-      <button id="restart-btn" class="btn">다시 시작</button>
+    </div>
+  </div>
+
+  <!-- ===== Excel Footer ===== -->
+  <div id="excel-footer">
+    <div id="excel-sheet-tabs">
+      <span id="excel-new-sheet">&#43;</span>
+      <span class="st st-active">Sheet1</span>
+      <span class="st">Sheet2</span>
+      <span class="st">Sheet3</span>
+    </div>
+    <div id="excel-status-bar">
+      <span>준비</span>
+      <span id="excel-status-stats">평균: 0 &nbsp; 개수: 0 &nbsp; 합계: 0</span>
+      <span>&#9633; &#9635; &#9636; &nbsp; &#8212; 100% &#8212; &#43;</span>
     </div>
   </div>
 
