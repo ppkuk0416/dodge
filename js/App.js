@@ -92,6 +92,15 @@ class App {
       this.my = e.touches[0].clientY;
     }, { passive: false });
 
+    // WASD keyboard
+    this.keys = {};
+    document.addEventListener('keydown', e => {
+      this.keys[e.key.toLowerCase()] = true;
+    });
+    document.addEventListener('keyup', e => {
+      this.keys[e.key.toLowerCase()] = false;
+    });
+
     // Resume AudioContext on first gesture
     const resume = () => { this.sound.resume(); };
     document.addEventListener('click',      resume, { once: true });
@@ -209,7 +218,19 @@ class App {
     return PATTERN_LEVELS[idx];
   }
 
+  _applyKeyboard(dt) {
+    const spd = 400 * dt / 1000; // 400px/s
+    if (this.keys['w'] || this.keys['arrowup'])    this.my -= spd;
+    if (this.keys['s'] || this.keys['arrowdown'])  this.my += spd;
+    if (this.keys['a'] || this.keys['arrowleft'])  this.mx -= spd;
+    if (this.keys['d'] || this.keys['arrowright']) this.mx += spd;
+    // Clamp to canvas
+    this.mx = Math.max(0, Math.min(this.canvas.width,  this.mx));
+    this.my = Math.max(0, Math.min(this.canvas.height, this.my));
+  }
+
   _update(dt) {
+    this._applyKeyboard(dt);
     this.time += dt;
     this.score = Math.floor(this.time / 1000);
     this.$score.textContent = this.score;
